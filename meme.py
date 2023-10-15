@@ -1,32 +1,36 @@
-meme_dict = {
-            "КРИНЖ": "Что-то очень странное или стыдное",
-            "ЛОЛ": "Что-то очень смешное",
-            "РОФЛ": "шутка",
-            "КРИПОВЫЙ": "страшный, пугающий",
-            "ЩИЩ": "одобрение или восторг"
-            }
-            
-name = input("Введите своё имя: ")
-print("Добро пожаловать,", name)            
-while True:
-    command = input("Введите команду(добавить, удалить, определить, закончить): ")
-    if command == "определить": 
-        word = input("Введите непонятное слово (большими буквами!): ")
-        
-        if word in meme_dict.keys():
-            # Что делать, если слово нашлось?
-            print(meme_dict[word])
-        else:
-            # Что делать, если слово не нашлось?
-            print("Такого слова нет")
-    elif command == "добавить":
-        add_key = input("Введите слово")
-        add_value = input("Введите его значение")
-        meme_dict = [add_key] = add_value
-    elif command == "удалить":
-        delete_key = input("Какое слово хотите удалить?")
-        del meme_dict [delete_key]
-    elif command == "закончить":
-        break 
-    else:
-        print("Такой команды нет")
+import discord
+from discord.ext import commands
+
+intents = discord.Intents.default()
+intents.message_content = True
+
+bot = commands.Bot(command_prefix='$', intents=intents)
+
+@bot.event
+async def on_ready():
+    print(f'We have logged in as {bot.user}')
+
+@bot.command()
+async def hello(ctx):
+    await ctx.send(f'Привет! Я бот {bot.user}!')
+
+@bot.command()
+async def heh(ctx, count_heh = 5):
+    await ctx.send("he" * count_heh)
+
+@bot.command()
+async def add(ctx, left: int, right: int):
+    """Adds two numbers together."""
+    await ctx.send(left + right)    
+
+@bot.command()
+async def repeat(ctx, times: int, content='repeating...'):
+    """Repeats a message multiple times."""
+    for i in range(times):
+        await ctx.send(content)
+
+@bot.command()
+async def mem(ctx):
+    await ctx.send("https://youtu.be/dQw4w9WgXcQ?si=9ZAP4kPMpNkQPCMO")
+
+bot.run()
